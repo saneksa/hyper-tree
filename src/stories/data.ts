@@ -34,7 +34,7 @@ const asyncChildren = [
 ]
 
 const getChildren = () =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
         setTimeout(() => resolve(asyncChildren), 1000)
     })
 

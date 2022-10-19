@@ -231,7 +231,7 @@ export class TreeView {
         if (shallow) {
             this.enhancedData = this._staticShallowEnahance(this.enhancedData)
         }
-        this.traverse(node => {
+        this.traverse((node) => {
             this._calculateChildrenCount(node)
         }, false)
     }
@@ -301,16 +301,16 @@ export class TreeView {
         for (let i = 0; i < data.length; i += 1) {
             if (data[i][this.options.idKey] === parentId) {
                 switch (insertType) {
-                case 'first': {
-                    data[i][this.options.childrenKey] = [...node, ...(data[i][this.options.childrenKey] || [])]
-                    return
-                }
-                case 'last': {
-                    data[i][this.options.childrenKey] = [...(data[i][this.options.childrenKey] || []), ...node]
-                    return
-                }
-                default:
-                    return
+                    case 'first': {
+                        data[i][this.options.childrenKey] = [...node, ...(data[i][this.options.childrenKey] || [])]
+                        return
+                    }
+                    case 'last': {
+                        data[i][this.options.childrenKey] = [...(data[i][this.options.childrenKey] || []), ...node]
+                        return
+                    }
+                    default:
+                        return
                 }
             } else if (data[i][this.options.childrenKey] && data[i][this.options.childrenKey].length !== 0) {
                 this._addChildren(data[i][this.options.childrenKey], parentId, node, insertType)
@@ -390,8 +390,8 @@ export class TreeView {
 
                 if (options.filter) {
                     if (children.length !== 0) {
-                        children = children.filter(currentChild => {
-                            if (currentChild.getChildren().some(c => c.isOpened())) {
+                        children = children.filter((currentChild) => {
+                            if (currentChild.getChildren().some((c) => c.isOpened())) {
                                 return true
                             }
                             return options.filter && options.filter(currentChild)
@@ -514,13 +514,13 @@ export class TreeView {
                     parentNode[this.options.childrenKey] =
                         leaveChildren === 'start'
                             ? [
-                                ...nodeToRemove[this.options.childrenKey],
-                                ...(parentNode[this.options.childrenKey] || [])
-                            ]
+                                  ...nodeToRemove[this.options.childrenKey],
+                                  ...(parentNode[this.options.childrenKey] || [])
+                              ]
                             : [
-                                ...(parentNode[this.options.childrenKey] || []),
-                                ...nodeToRemove[this.options.childrenKey]
-                            ]
+                                  ...(parentNode[this.options.childrenKey] || []),
+                                  ...nodeToRemove[this.options.childrenKey]
+                              ]
                 }
                 return
             }

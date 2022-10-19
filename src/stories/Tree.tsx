@@ -6,11 +6,11 @@ import { smallData } from './data'
 
 export const Tree = () => {
     const [value, setValue] = React.useState('')
-    const onChange = React.useCallback(e => {
+    const onChange = React.useCallback((e) => {
         setValue(e.target.value)
     }, [])
     const filter = React.useCallback(
-        data => {
+        (data) => {
             if (!value) {
                 return true
             }

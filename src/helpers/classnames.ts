@@ -4,7 +4,7 @@ export type IClassNamesProps = string | undefined
 
 export const convertObjectToString = (classes: { [key: string]: boolean }): string =>
     Object.keys(classes)
-        .filter(key => !!classes[key])
+        .filter((key) => !!classes[key])
         .reduce(
             (classString: string, item: string) =>
                 classString ? `${classString}${item ? ` ${item}` : ''}` : `${item}`,

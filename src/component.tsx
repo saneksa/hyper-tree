@@ -9,6 +9,7 @@ import { classnames } from './helpers/classnames'
 import { defaultProps } from './helpers/defaultProps'
 import { HyperTreeNodeProps, HyperTreeViewProps, HyperTreeViewMainProps } from './types'
 import styles from './style.scss'
+import { useIsomorphicLayoutEffect } from './helpers/hooks'
 
 const HyperTreeNode = React.forwardRef<HTMLDivElement, HyperTreeNodeProps>(
     (
@@ -57,10 +58,10 @@ const HyperTreeNode = React.forwardRef<HTMLDivElement, HyperTreeNodeProps>(
 
         const offsetProp = gapMode === 'padding' ? 'paddingLeft' : 'marginLeft'
 
-        const handleDragEnter = React.useCallback((type: any) => draggableHandlers.handleDragEnter(node, type), [
-            draggableHandlers,
-            node
-        ])
+        const handleDragEnter = React.useCallback(
+            (type: any) => draggableHandlers.handleDragEnter(node, type),
+            [draggableHandlers, node]
+        )
 
         return (
             <div
@@ -80,27 +81,28 @@ const HyperTreeNode = React.forwardRef<HTMLDivElement, HyperTreeNodeProps>(
             >
                 {draggable && renderDragZone
                     ? renderDragZone({
-                        depth,
-                        depthGap,
-                        isDragging,
-                        node,
-                        onDragEnterAfter: handleDragEnter('after'),
-                        onDragEnterBefore: handleDragEnter('before'),
-                        onDragEnterChildren: handleDragEnter('children'),
-                        onDragLeave: draggableHandlers.handleDragLeave(node)
-                    })
+                          depth,
+                          depthGap,
+                          isDragging,
+                          node,
+                          onDragEnterAfter: handleDragEnter('after'),
+                          onDragEnterBefore: handleDragEnter('before'),
+                          onDragEnterChildren: handleDragEnter('children'),
+                          onDragLeave: draggableHandlers.handleDragLeave(node)
+                      })
                     : draggable && (
-                        <DragZone
-                            depth={depth}
-                            depthGap={depthGap}
-                            isDragging={isDragging}
-                            node={node}
-                            onDragEnterAfter={handleDragEnter('after')}
-                            onDragEnterBefore={handleDragEnter('before')}
-                            onDragEnterChildren={handleDragEnter('children')}
-                            onDragLeave={draggableHandlers.handleDragLeave(node)}
-                        />
-                    )}
+                          <DragZone
+                              depth={depth}
+                              depthGap={depthGap}
+                              isDragging={isDragging}
+                              node={node}
+                              onDragEnterAfter={handleDragEnter('after')}
+                              onDragEnterBefore={handleDragEnter('before')}
+                              onDragEnterChildren={handleDragEnter('children')}
+                              onDragLeave={draggableHandlers.handleDragLeave(node)}
+                          />
+                      )}
+
                 {renderNode ? (
                     renderNode({
                         depth,
@@ -213,7 +215,7 @@ const Tree: React.FC<HyperTreeViewMainProps> = ({ classes = defaultProps.classes
     const nodeRef = React.useRef<HTMLDivElement>(null)
     const [height, setHeight] = React.useState<number>(staticNodeHeight || 0)
 
-    React.useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (nodeRef.current && !staticNodeHeight) {
             setTimeout(() => {
                 const rect = nodeRef.current?.getBoundingClientRect()
@@ -222,7 +224,7 @@ const Tree: React.FC<HyperTreeViewMainProps> = ({ classes = defaultProps.classes
                 }
             }, 100)
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [height, staticNodeHeight, nodeRef.current])
 
     return (

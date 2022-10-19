@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, useEffect } from 'react'
+import { useMemo, useCallback, useState, useEffect, useLayoutEffect } from 'react'
 import hash from 'hash-sum'
 import { TreeView, IFilter, ISort, TreeNode, InsertChildType, InsertSiblingType, IData } from './node'
 import { treeHandlers } from './treeHandlers'
@@ -22,6 +22,8 @@ export type IDropType = 'before' | 'children' | 'after'
 const defaultOptions = {
     sort: () => 0 as const
 }
+
+export const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 const useForceUpdate = () => {
     const [, dispatch] = useState<{}>(Object.create(null))
@@ -480,12 +482,22 @@ export const useTreeState = ({
         ]
     )
 
-    return {
-        instance: treeView,
-        handlers,
-        required: {
+    const required = useMemo(
+        () => ({
             isDragging,
             data: treeView.enhancedData
-        }
-    }
+        }),
+        [isDragging, treeView.enhancedData]
+    )
+
+    const result = useMemo(
+        () => ({
+            instance: treeView,
+            handlers,
+            required
+        }),
+        [handlers, required, treeView]
+    )
+
+    return result
 }
